@@ -1,0 +1,29 @@
+{
+  "name": "reddit-clone",
+  "version": "1.0.0",
+  "description": "A simple clone of reddit using GraphQL, Typescript, react",
+  "main": "index.js",
+  "scripts": {
+    "watch": "tsc -w",
+    "start": "nodemon dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelslec/reddit-clone.git"
+  },
+  "author": "Michael LeCompte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelslec/reddit-clone/issues"
+  },
+  "homepage": "https://github.com/michaelslec/reddit-clone#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^4.4.2",
+    "@mikro-orm/migrations": "^4.4.2",
+    "@mikro-orm/postgresql": "^4.4.2",
+    "pg": "^8.5.1"
+  }
+}
