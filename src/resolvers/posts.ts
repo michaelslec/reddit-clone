@@ -41,4 +41,22 @@ export class PostResolver {
 
     return post;
   }
+
+  @Mutation(() => Boolean)
+  async deletePost(
+    @Arg("id") id: number,
+    @Ctx() { em }: MyCtx
+  ): Promise<boolean> {
+    let post: Post;
+    try {
+      post = await em.findOneOrFail(Post, { id });
+      console.log(typeof post);
+    } catch (error) {
+      return false;
+    }
+
+    await em.removeAndFlush(post);
+
+    return true;
+  }
 }
