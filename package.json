@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "watch": "tsc -w",
-    "start": "nodemon --inspect dist/index.js"
+    "start": "nodemon --inspect dist/index.js",
+    "create:migration": "mikro-orm migration:create"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "@mikro-orm/migrations": "^4.4.2",
     "@mikro-orm/postgresql": "^4.4.2",
     "apollo-server-express": "^2.21.0",
+    "argon2": "^0.27.1",
     "class-validator": "^0.13.1",
     "express": "^4.17.1",
     "graphql": "^15.5.0",
