@@ -9,6 +9,7 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
 
@@ -52,7 +53,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyCtx
+    @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
     if (options.username.length <= 2)
       return new FieldError("username", "Length must be greater than 2");
@@ -94,6 +95,8 @@ export class UserResolver {
 
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) return new FieldError("password", "Password is incorrect");
+
+    req.session.userId = user.id;
 
     return user;
   }
