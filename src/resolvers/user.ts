@@ -77,7 +77,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyCtx
+    @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
     const user = await em.findOne(User, { username: options.username });
     if (!user) return new FieldError("username", "Username doesn't exist");
