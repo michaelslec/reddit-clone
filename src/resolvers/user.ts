@@ -3,6 +3,7 @@ import { User } from "../entities/User";
 import { MyCtx } from "src/types";
 import {
   Arg,
+  createUnionType,
   Ctx,
   Field,
   InputType,
@@ -21,6 +22,11 @@ class UsernamePasswordInput {
 
 @ObjectType()
 class FieldError {
+  constructor(field: string, message: string) {
+    this.field = field;
+    this.message = message;
+  }
+
   @Field()
   field: string;
 
@@ -28,14 +34,10 @@ class FieldError {
   message: string;
 }
 
-@ObjectType()
-class UserResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-
-  @Field(() => User, { nullable: true })
-  user?: User;
-}
+const UserResponse = createUnionType({
+  name: "UserResponse",
+  types: () => [FieldError, User],
+});
 
 @Resolver()
 export class UserResolver {
@@ -57,32 +59,13 @@ export class UserResolver {
   async login(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em }: MyCtx
-  ): Promise<UserResponse> {
+  ): Promise<typeof UserResponse> {
     const user = await em.findOne(User, { username: options.username });
-    if (!user) {
-      return {
-        errors: [
-          {
-            field: "username",
-            message: "Username doesn't exist",
-          },
-        ],
-      };
-    }
-    const valid = await argon2.verify(user.password, options.password);
-    if (!valid) {
-      return {
-        errors: [
-          {
-            field: "password",
-            message: "Incorrect password",
-          },
-        ],
-      };
-    }
+    if (!user) return new FieldError("username", "Username doesn't exist");
 
-    return {
-      user,
-    };
+    const valid = await argon2.verify(user.password, options.password);
+    if (!valid) return new FieldError("password", "Password is incorrect");
+
+    return user;
   }
 }
