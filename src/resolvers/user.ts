@@ -57,7 +57,19 @@ export class UserResolver {
       username: options.username,
       password: hashedPassword,
     });
-    await em.persistAndFlush(user);
+
+    try {
+      await em.persistAndFlush(user);
+    } catch (err) {
+      // 23505 ==
+      if (err.code == "23505")
+        return new FieldError("username", "Username already exists");
+      else
+        return new FieldError(
+          "Unkown",
+          `Unkown error-server response: ${err.message}`
+        );
+    }
 
     return user;
   }
