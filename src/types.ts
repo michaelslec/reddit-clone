@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 
 declare module "express-session" {
   interface Session {
-    userId: Number;
+    userId: number;
   }
 }
 
