@@ -35,6 +35,7 @@ async function main() {
         sameSite: "lax",
         secure: __prod__, // cookie only works in https
       },
+      saveUninitialized: false,
       secret: process.env.SESH_SECRET as string,
       resave: false,
     })
