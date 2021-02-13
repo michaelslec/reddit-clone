@@ -1,30 +1,18 @@
 import { Post } from "../entities/Post";
 import { Arg, Ctx, Int, Query, Resolver } from "type-graphql";
-import { EntityManager, IDatabaseDriver, Connection } from "@mikro-orm/core";
+import { MyCtx } from "src/types";
 
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
-  posts(
-    @Ctx()
-    {
-      em,
-    }: {
-      em: EntityManager<any> & EntityManager<IDatabaseDriver<Connection>>;
-    }
-  ): Promise<Post[]> {
+  posts(@Ctx() { em }: MyCtx): Promise<Post[]> {
     return em.find(Post, {});
   }
 
   @Query(() => Post, { nullable: true })
   post(
     @Arg("id", () => Int) id: number,
-    @Ctx()
-    {
-      em,
-    }: {
-      em: EntityManager<any> & EntityManager<IDatabaseDriver<Connection>>;
-    }
+    @Ctx() { em }: MyCtx
   ): Promise<Post | null> {
     return em.findOne(Post, { id });
   }
