@@ -41,17 +41,24 @@ const UserResponse = createUnionType({
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em }: MyCtx
-  ): Promise<User> {
+  ): Promise<typeof UserResponse> {
+    if (options.username.length <= 2)
+      return new FieldError("username", "Length must be greater than 2");
+
+    if (options.username.length <= 3)
+      return new FieldError("password", "Length must be greater than 3");
+
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username,
       password: hashedPassword,
     });
     await em.persistAndFlush(user);
+
     return user;
   }
 
