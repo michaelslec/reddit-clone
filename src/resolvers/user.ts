@@ -1,7 +1,15 @@
 import * as argon2 from "argon2";
 import { User } from "../entities/User";
 import { MyCtx } from "src/types";
-import { Arg, Ctx, Field, InputType, Mutation, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  InputType,
+  Mutation,
+  ObjectType,
+  Resolver,
+} from "type-graphql";
 
 @InputType()
 class UsernamePasswordInput {
@@ -43,5 +51,38 @@ export class UserResolver {
     });
     await em.persistAndFlush(user);
     return user;
+  }
+
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg("options") options: UsernamePasswordInput,
+    @Ctx() { em }: MyCtx
+  ): Promise<UserResponse> {
+    const user = await em.findOne(User, { username: options.username });
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "Username doesn't exist",
+          },
+        ],
+      };
+    }
+    const valid = await argon2.verify(user.password, options.password);
+    if (!valid) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Incorrect password",
+          },
+        ],
+      };
+    }
+
+    return {
+      user,
+    };
   }
 }
