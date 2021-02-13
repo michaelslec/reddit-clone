@@ -11,6 +11,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import { MyCtx } from "./types";
 
 async function main() {
   const orm = await MikroORM.init(microConfig);
@@ -44,7 +45,7 @@ async function main() {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }),
+    context: ({ req, res }): MyCtx => ({ em: orm.em, req, res }),
   });
 
   server.applyMiddleware({ app });
