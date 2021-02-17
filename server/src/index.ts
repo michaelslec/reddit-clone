@@ -12,6 +12,7 @@ import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { MyCtx } from "./types";
+import cors from "cors";
 
 async function main() {
   const orm = await MikroORM.init(microConfig);
@@ -21,6 +22,13 @@ async function main() {
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient();
+
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
   app.use(
     session({
@@ -49,7 +57,7 @@ async function main() {
     context: ({ req, res }): MyCtx => ({ em: orm.em, req, res }),
   });
 
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: false });
 
   app.listen(3001, () => {
     console.log("server started on http://localhost:3001");
