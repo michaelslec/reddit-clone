@@ -58,8 +58,9 @@ export class UserResolver {
     if (options.username.length <= 2)
       return new FieldError("username", "Length must be greater than 2");
 
-    if (options.username.length <= 3)
+    if (options.password.length <= 3) {
       return new FieldError("password", "Length must be greater than 3");
+    }
 
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
