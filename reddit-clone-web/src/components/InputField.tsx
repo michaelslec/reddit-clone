@@ -13,19 +13,27 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
 };
 
-export default function InputField(
-  props: InputFieldProps
-): ReactElement | null {
+export default function InputField({
+  label,
+  placeholder,
+  size: _,
+  ...props
+}: InputFieldProps): ReactElement | null {
   const [field, { error }] = useField(props);
 
-  const placeholder = props.placeholder || props.name;
-  const label =
-    props.label || props.name[0].toUpperCase() + props.name.slice(1);
+  const infer_placeholder = placeholder || props.name;
+  const infer_label =
+    label || props.name[0].toUpperCase() + props.name.slice(1);
 
   return (
     <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={field.name}>{label}</FormLabel>
-      <Input {...field} id={field.name} placeholder={placeholder} />
+      <FormLabel htmlFor={field.name}>{infer_label}</FormLabel>
+      <Input
+        {...field}
+        {...props}
+        id={field.name}
+        placeholder={infer_placeholder}
+      />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>
   );
