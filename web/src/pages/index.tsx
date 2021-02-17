@@ -1,3 +1,10 @@
-const Index = () => <div>Hello world!</div>;
+import NavBar from "../components/NavBar";
 
-export default Index;
+export default function Index() {
+  return (
+    <>
+      <NavBar />
+      <div>Hello world!</div>
+    </>
+  );
+}
