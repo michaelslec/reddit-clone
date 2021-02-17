@@ -51,8 +51,8 @@ async function main() {
 
   server.applyMiddleware({ app });
 
-  app.listen(8080, () => {
-    console.log("server started on http://localhost:8080");
+  app.listen(3001, () => {
+    console.log("server started on http://localhost:3001");
   });
 }
 
