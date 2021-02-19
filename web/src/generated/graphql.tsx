@@ -96,7 +96,7 @@ export type EmailUsernamePasswordInput = {
 
 export type CommonUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
+  & Pick<User, 'id' | 'username' | 'email'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -165,6 +165,7 @@ export const CommonUserFragmentDoc = gql`
     fragment CommonUser on User {
   id
   username
+  email
 }
     `;
 export const LoginDocument = gql`
