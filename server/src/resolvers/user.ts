@@ -43,6 +43,12 @@ const UserResponse = createUnionType({
 
 @Resolver()
 export class UserResolver {
+  @Mutation(() => Boolean)
+  async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyCtx) {
+    // const user = await em.findOne(User, { email });
+    return true;
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyCtx) {
     if (!req.session.userId) return null;
