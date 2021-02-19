@@ -17,7 +17,7 @@ import { COOKIE_NAME } from "../constants";
 @InputType()
 class EmailUsernamePasswordInput {
   @Field()
-  email?: string;
+  email: string;
   @Field()
   username: string;
   @Field()
@@ -81,7 +81,6 @@ export class UserResolver {
     try {
       await em.persistAndFlush(user);
     } catch (err) {
-      console.log(err);
       // TODO: watch here for error code on username AND/OR email already existing
       if (err.code == "23505" && err.detail.includes("email"))
         return new FieldError("email", "Email already exists");
@@ -107,16 +106,16 @@ export class UserResolver {
   ): Promise<typeof UserResponse> {
     const user = await em.findOne(
       User,
-      typeof options.email !== "undefined"
+      options.email !== ""
         ? { email: options.email }
         : { username: options.username }
     );
+
     if (user === null)
       return new FieldError("username", "Username or email doesn't exist");
 
     const valid = await argon2.verify(user.password, options.password);
-    if (valid === null)
-      return new FieldError("password", "Password is incorrect");
+    if (!valid) return new FieldError("password", "Password is incorrect");
 
     req.session.userId = user.id;
 

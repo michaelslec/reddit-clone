@@ -15,13 +15,25 @@ const Login: React.FC<{}> = ({}) => {
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ usernameOrEmail: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
-          const response = await login({ options: values });
+          const response = await login({
+            options: values.usernameOrEmail.includes("@")
+              ? {
+                  email: values.usernameOrEmail,
+                  username: "",
+                  password: values.password,
+                }
+              : {
+                  email: "",
+                  username: values.usernameOrEmail,
+                  password: values.password,
+                },
+          });
           const data = response.data?.login;
           if (data?.__typename === "FieldError")
             setErrors({
-              username: data.field === "username" ? data.message : "",
+              usernameOrEmail: data.field === "username" ? data.message : "",
               password: data.field === "password" ? data.message : "",
             });
           else router.push("/");
@@ -29,7 +41,11 @@ const Login: React.FC<{}> = ({}) => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <InputField name="username" />
+            <InputField
+              name="usernameOrEmail"
+              label="username"
+              placeholder="username"
+            />
             <Box mt={4}>
               <InputField name="password" type="password" />
             </Box>
