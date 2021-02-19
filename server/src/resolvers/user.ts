@@ -67,6 +67,9 @@ export class UserResolver {
     if (!options.email.includes("@"))
       return new FieldError("email", "Invalid email address");
 
+    if (options.username.includes("@"))
+      return new FieldError("username", "Cannot include '@'");
+
     if (options.username.length <= 2)
       return new FieldError("username", "Length must be greater than 2");
 
@@ -100,10 +103,16 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg("password") password: string,
     @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
-    const user = await em.findOne(User, { username: options.username });
+    const user = await em.findOne(
+      User,
+      usernameOrEmail.includes("@")
+        ? { email: usernameOrEmail }
+        : { username: usernameOrEmail }
+    );
     if (!user) return new FieldError("username", "Username doesn't exist");
 
     const valid = await argon2.verify(user.password, options.password);
