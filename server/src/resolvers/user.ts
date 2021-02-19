@@ -15,9 +15,9 @@ import {
 import { COOKIE_NAME } from "../constants";
 
 @InputType()
-class UsernamePasswordInput {
+class EmailUsernamePasswordInput {
   @Field()
-  email: string;
+  email?: string;
   @Field()
   username: string;
   @Field()
@@ -45,12 +45,6 @@ const UserResponse = createUnionType({
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyCtx) {
-    // const user = await em.findOne(User, { email });
-    return true;
-  }
-
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyCtx) {
     if (!req.session.userId) return null;
@@ -61,10 +55,10 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: EmailUsernamePasswordInput,
     @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
-    if (!options.email.includes("@"))
+    if (!options.email?.includes("@"))
       return new FieldError("email", "Invalid email address");
 
     if (options.username.includes("@"))
@@ -79,6 +73,7 @@ export class UserResolver {
 
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
+      email: options.email,
       username: options.username,
       password: hashedPassword,
     });
@@ -86,12 +81,15 @@ export class UserResolver {
     try {
       await em.persistAndFlush(user);
     } catch (err) {
-      // 23505 ==
-      if (err.code == "23505")
+      console.log(err);
+      // TODO: watch here for error code on username AND/OR email already existing
+      if (err.code == "23505" && err.detail.includes("email"))
+        return new FieldError("email", "Email already exists");
+      else if (err.code == "23505" && err.detail.includes("username"))
         return new FieldError("username", "Username already exists");
       else
         return new FieldError(
-          "Unkown",
+          "unkown",
           `Unkown error-server response: ${err.message}`
         );
     }
@@ -103,20 +101,22 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("usernameOrEmail") usernameOrEmail: string,
-    @Arg("password") password: string,
+    @Arg("options")
+    options: EmailUsernamePasswordInput,
     @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
     const user = await em.findOne(
       User,
-      usernameOrEmail.includes("@")
-        ? { email: usernameOrEmail }
-        : { username: usernameOrEmail }
+      typeof options.email !== "undefined"
+        ? { email: options.email }
+        : { username: options.username }
     );
-    if (!user) return new FieldError("username", "Username doesn't exist");
+    if (user === null)
+      return new FieldError("username", "Username or email doesn't exist");
 
     const valid = await argon2.verify(user.password, options.password);
-    if (!valid) return new FieldError("password", "Password is incorrect");
+    if (valid === null)
+      return new FieldError("password", "Password is incorrect");
 
     req.session.userId = user.id;
 
