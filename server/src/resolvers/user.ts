@@ -17,6 +17,8 @@ import { COOKIE_NAME } from "../constants";
 @InputType()
 class UsernamePasswordInput {
   @Field()
+  email: string;
+  @Field()
   username: string;
   @Field()
   password: string;
@@ -62,6 +64,9 @@ export class UserResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em, req }: MyCtx
   ): Promise<typeof UserResponse> {
+    if (!options.email.includes("@"))
+      return new FieldError("email", "Invalid email address");
+
     if (options.username.length <= 2)
       return new FieldError("username", "Length must be greater than 2");
 
