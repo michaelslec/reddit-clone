@@ -15,6 +15,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import InputField from "../../components/InputField";
+import TokenAlert from "../../components/TokenAlert";
 import { Wrapper } from "../../components/Wrapper";
 import { useChangePasswordMutation } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClients";
@@ -39,22 +40,7 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
             if (data.field === "token")
               toast({
                 render: () => {
-                  return (
-                    <Alert status="error">
-                      <AlertIcon />
-                      <Box flex="1">
-                        <AlertTitle>An Error Occured</AlertTitle>
-                        <AlertDescription>
-                          {data.message + ". "}
-                          {data.message.includes("expired") ? (
-                            <NextLink href="/forgot-password">
-                              <Link color="grey">Click Here</Link>
-                            </NextLink>
-                          ) : null}
-                        </AlertDescription>
-                      </Box>
-                    </Alert>
-                  );
+                  return <TokenAlert message={data.message} />;
                 },
               });
 
