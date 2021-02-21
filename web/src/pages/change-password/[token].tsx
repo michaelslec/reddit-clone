@@ -1,17 +1,7 @@
-import {
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  Button,
-  useToast,
-  Link,
-  AlertDescription,
-  Box,
-} from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import InputField from "../../components/InputField";
