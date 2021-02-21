@@ -14,6 +14,7 @@ import cors from "cors";
 import { createConnection } from "typeorm";
 import { User } from "./entities/User";
 import { Post } from "./entities/Post";
+import path from "path";
 
 async function main() {
   const conn = await createConnection({
@@ -21,8 +22,10 @@ async function main() {
     database: "reddit-clone",
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User],
   });
+  await conn.runMigrations();
 
   const app = express();
 
