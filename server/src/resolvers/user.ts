@@ -95,7 +95,7 @@ export class UserResolver {
     );
 
     await sendEmail(
-      input.email,
+      user.email,
       `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
     );
 
