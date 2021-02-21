@@ -75,15 +75,11 @@ export class UserResolver {
   async forgotPassword(
     @Arg("input") input: EmailUsernamePasswordInput,
     @Ctx() { em, redis }: MyCtx
-  ): Promise<FieldError | boolean> {
+  ): Promise<boolean> {
     let where;
     if (input.email !== "") where = { email: input.email };
     else if (input.username !== "") where = { username: input.username };
-    else
-      return new FieldError(
-        "usernameOrEmail",
-        "Please provide a username or email"
-      );
+    else return false;
 
     const user = await em.findOne(User, where);
     if (user === null) return true;
