@@ -23,9 +23,7 @@ const Register: React.FC<registerProps> = ({}) => {
           const data = response.data?.register;
           if (data?.__typename === "FieldError")
             setErrors({
-              email: data.field === "email" ? data.message : "",
-              username: data.field === "username" ? data.message : "",
-              password: data.field === "password" ? data.message : "",
+              [data.field]: data.message,
             });
           else router.push("/");
         }}
