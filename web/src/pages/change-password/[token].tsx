@@ -46,6 +46,7 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
               name="newPassword"
               label="New Password"
               placeholder="New Password"
+              type="password"
             />
             <Button
               mt={4}
