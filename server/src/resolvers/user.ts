@@ -13,6 +13,7 @@ import {
   Resolver,
 } from "type-graphql";
 import { COOKIE_NAME } from "../constants";
+import sendEmail from "../utils/sendEmail";
 
 @InputType()
 class EmailUsernamePasswordInput {
@@ -45,6 +46,29 @@ const UserResponse = createUnionType({
 
 @Resolver()
 export class UserResolver {
+  @Mutation(() => Boolean)
+  async forgotPassword(
+    @Arg("input") input: EmailUsernamePasswordInput,
+    @Ctx() { em }: MyCtx
+  ) {
+    const where =
+      input.email === ""
+        ? { username: input.username }
+        : { email: input.email };
+
+    const user = await em.findOne(User, where);
+    if (user === null) return true;
+
+    const token = "asdfinfineij3hn2ind";
+
+    await sendEmail(
+      input.email,
+      `<a href="htp://localhost:3000/change-password/${token}">reset password</a>`
+    );
+
+    return true;
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyCtx) {
     if (!req.session.userId) return null;
