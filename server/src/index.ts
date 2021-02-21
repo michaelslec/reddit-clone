@@ -13,8 +13,15 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import { MyCtx } from "./types";
 import cors from "cors";
+import { createConnection } from "typeorm";
 
 async function main() {
+  const conn = await createConnection({
+    type: "postgres",
+    database: "reddit-clone",
+    logging: true,
+    synchronize: true,
+  });
   const orm = await MikroORM.init(microConfig);
   await orm.getMigrator().up();
 
