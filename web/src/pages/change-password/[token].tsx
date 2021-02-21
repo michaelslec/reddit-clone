@@ -30,7 +30,7 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
             if (data.field === "token")
               toast({
                 render: () => {
-                  return <TokenAlert message={data.message} />;
+                  return <TokenAlert router={router} message={data.message} />;
                 },
               });
 

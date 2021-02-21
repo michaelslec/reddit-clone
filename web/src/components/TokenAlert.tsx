@@ -6,16 +6,22 @@ import {
   AlertDescription,
   Link,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
+import { NextRouter } from "next/router";
 import { ReactElement } from "react";
 
 export interface TokenAlertProps {
   message: string;
+  router: NextRouter;
 }
 
 export default function TokenAlert({
   message,
+  router,
 }: TokenAlertProps): ReactElement | null {
+  const handleLink = () => {
+    router.push("/forgot-password");
+  };
+
   return (
     <Alert status="error">
       <AlertIcon />
@@ -24,11 +30,9 @@ export default function TokenAlert({
         <AlertDescription>
           {message + ". "}
           {message.includes("expired") ? (
-            <NextLink href="/forgot-password" passHref>
-              <Link href="/forgot-password" color="grey">
-                Click Here
-              </Link>
-            </NextLink>
+            <Link onClick={handleLink} color="grey">
+              Click Here
+            </Link>
           ) : null}
         </AlertDescription>
       </Box>
