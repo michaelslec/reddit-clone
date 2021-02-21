@@ -5,6 +5,7 @@ import {
   AlertTitle,
   AlertDescription,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 import { NextRouter } from "next/router";
 import { ReactElement } from "react";
@@ -18,8 +19,10 @@ export default function TokenAlert({
   message,
   router,
 }: TokenAlertProps): ReactElement | null {
+  const toast = useToast();
   const handleLink = () => {
     router.push("/forgot-password");
+    toast.closeAll();
   };
 
   return (
