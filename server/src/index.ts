@@ -14,6 +14,8 @@ import connectRedis from "connect-redis";
 import { MyCtx } from "./types";
 import cors from "cors";
 import { createConnection } from "typeorm";
+import { User } from "./entities/User";
+import { Post } from "./entities/Post";
 
 async function main() {
   const conn = await createConnection({
@@ -21,9 +23,8 @@ async function main() {
     database: "reddit-clone",
     logging: true,
     synchronize: true,
+    entities: [Post, User],
   });
-  const orm = await MikroORM.init(microConfig);
-  await orm.getMigrator().up();
 
   const app = express();
 
