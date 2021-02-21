@@ -13,7 +13,6 @@ import {
 import { betterUpdateQuery } from "./betterUpdateQuery";
 
 export const errorExchange: Exchange = ({ forward }) => (ops$) => {
-  console.log("asdfasdf");
   return pipe(
     forward(ops$),
     tap(({ error }) => {
