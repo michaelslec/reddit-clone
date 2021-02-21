@@ -37,6 +37,11 @@ const Login: React.FC<{}> = ({}) => {
               usernameOrEmail: data.field === "username" ? data.message : "",
               password: data.field === "password" ? data.message : "",
             });
+          else if (
+            data?.__typename === "User" &&
+            typeof router.query.next === "string"
+          )
+            router.push(router.query.next);
           else router.push("/");
         }}
       >
