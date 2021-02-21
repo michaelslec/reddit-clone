@@ -8,7 +8,7 @@ import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/posts";
 import { UserResolver } from "./resolvers/user";
-import redis from "redis";
+import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { MyCtx } from "./types";
@@ -21,8 +21,8 @@ async function main() {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
 
+  const redis = Redis();
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -34,7 +34,7 @@ async function main() {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -54,7 +54,7 @@ async function main() {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyCtx => ({ em: orm.em, req, res }),
+    context: ({ req, res }): MyCtx => ({ em: orm.em, req, res, redis }),
   });
 
   server.applyMiddleware({ app, cors: false });

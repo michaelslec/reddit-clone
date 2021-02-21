@@ -12,8 +12,9 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { COOKIE_NAME } from "../constants";
+import { COOKIE_NAME, FORET_PASSWORD_PREFIX } from "../constants";
 import sendEmail from "../utils/sendEmail";
+import { redis } from "ioredis";
 import { v4 } from "uuid";
 
 @InputType()
@@ -61,6 +62,12 @@ export class UserResolver {
     if (user === null) return true;
 
     const token = v4();
+    redis.set(
+      FORET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24
+    );
 
     await sendEmail(
       input.email,
