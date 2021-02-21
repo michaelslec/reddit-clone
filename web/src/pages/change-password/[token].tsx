@@ -1,9 +1,9 @@
-import { Button } from "@chakra-ui/react";
+import { Alert, AlertIcon, Button, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import InputField from "../../components/InputField";
 import { Wrapper } from "../../components/Wrapper";
 import { useChangePasswordMutation } from "../../generated/graphql";
@@ -12,6 +12,8 @@ import { createUrqlClient } from "../../utils/createUrqlClients";
 const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
   const [, changePassword] = useChangePasswordMutation();
   const router = useRouter();
+  const toast = useToast();
+
   return (
     <Wrapper variant="small">
       <Formik
@@ -23,11 +25,20 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
           });
 
           const data = response.data?.changePassword;
-          if (data?.__typename === "FieldError")
+          if (data?.__typename === "FieldError") {
+            if (data.field === "token")
+              toast({
+                title: "An error occurred.",
+                description: data.message,
+                status: "error",
+                duration: 8000,
+                isClosable: true,
+              });
+
             setErrors({
               [data.field]: data.message,
             });
-          else router.push("/");
+          } else router.push("/");
         }}
       >
         {({ isSubmitting }) => (
@@ -58,4 +69,4 @@ ChangePassword.getInitialProps = ({ query }) => {
   };
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(ChangePassword);
+export default withUrqlClient(createUrqlClient)(ChangePassword);
