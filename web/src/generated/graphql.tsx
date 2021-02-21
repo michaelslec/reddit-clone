@@ -49,6 +49,8 @@ export type Mutation = {
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
+  changePassword: UserResponse;
+  forgotPassword: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -68,6 +70,17 @@ export type MutationUpdatePostArgs = {
 
 export type MutationDeletePostArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationForgotPasswordArgs = {
+  input: EmailUsernamePasswordInput;
 };
 
 
@@ -97,6 +110,28 @@ export type EmailUsernamePasswordInput = {
 export type CommonUserFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username' | 'email'>
+);
+
+export type ErrorFragment = (
+  { __typename?: 'FieldError' }
+  & Pick<FieldError, 'field' | 'message'>
+);
+
+export type ChangePasswordMutationVariables = Exact<{
+  token: Scalars['String'];
+  newPassword: Scalars['String'];
+}>;
+
+
+export type ChangePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { changePassword: (
+    { __typename?: 'FieldError' }
+    & ErrorFragment
+  ) | (
+    { __typename?: 'User' }
+    & CommonUserFragment
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -168,6 +203,29 @@ export const CommonUserFragmentDoc = gql`
   email
 }
     `;
+export const ErrorFragmentDoc = gql`
+    fragment Error on FieldError {
+  field
+  message
+}
+    `;
+export const ChangePasswordDocument = gql`
+    mutation changePassword($token: String!, $newPassword: String!) {
+  changePassword(token: $token, newPassword: $newPassword) {
+    ... on FieldError {
+      ...Error
+    }
+    ... on User {
+      ...CommonUser
+    }
+  }
+}
+    ${ErrorFragmentDoc}
+${CommonUserFragmentDoc}`;
+
+export function useChangePasswordMutation() {
+  return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
 export const LoginDocument = gql`
     mutation Login($options: EmailUsernamePasswordInput!) {
   login(options: $options) {
