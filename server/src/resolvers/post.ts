@@ -5,6 +5,7 @@ import {
   Field,
   Float,
   InputType,
+  Int,
   Mutation,
   Query,
   Resolver,
@@ -26,7 +27,7 @@ class PostInput {
 export class PostResolver {
   @Query(() => [Post])
   posts(
-    @Arg("limit") limit: number,
+    @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
   ): Promise<Post[]> {
     const realLimit = Math.min(50, limit);
@@ -60,7 +61,7 @@ export class PostResolver {
   @Mutation(() => Post, { nullable: true })
   async updatePost(
     @Arg("id") id: number,
-    @Arg("title", () => String, { nullable: true }) title: string
+    @Arg("title", () => String, { nullable: true }) title: string | undefined
   ): Promise<Post | null> {
     const post = await Post.findOne({ id });
 
