@@ -14,6 +14,7 @@ import {
 } from "type-graphql";
 import { COOKIE_NAME } from "../constants";
 import sendEmail from "../utils/sendEmail";
+import { v4 } from "uuid";
 
 @InputType()
 class EmailUsernamePasswordInput {
@@ -59,7 +60,7 @@ export class UserResolver {
     const user = await em.findOne(User, where);
     if (user === null) return true;
 
-    const token = "asdfinfineij3hn2ind";
+    const token = v4();
 
     await sendEmail(
       input.email,
