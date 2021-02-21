@@ -19,11 +19,12 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 export default function InputField({
   label,
   placeholder,
+  textArea,
   size: _,
   ...props
 }: InputFieldProps): ReactElement | null {
   let InputOrTextarea: ComponentWithAs<any> =
-    typeof props.textArea == "undefined" ? Input : Textarea;
+    typeof textArea == "undefined" ? Input : Textarea;
   const [field, { error }] = useField(props);
 
   const infer_placeholder = placeholder || props.name;
