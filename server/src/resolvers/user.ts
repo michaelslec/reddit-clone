@@ -12,7 +12,7 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { COOKIE_NAME, FORET_PASSWORD_PREFIX } from "../constants";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import sendEmail from "../utils/sendEmail";
 import { v4 } from "uuid";
 
@@ -56,7 +56,7 @@ export class UserResolver {
     if (newPassword.length <= 2)
       return new FieldError("newPassword", "Length must be greater than 2");
 
-    const userId = await redis.get(FORET_PASSWORD_PREFIX + token);
+    const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
     if (userId === null) return new FieldError("token", "Token expired");
 
     const user = await em.findOne(User, { id: parseInt(userId) });
@@ -66,7 +66,6 @@ export class UserResolver {
     await em.persistAndFlush(user);
 
     redis.del(FORGET_PASSWORD_PREFIX + token);
-
     req.session.userId = user.id;
 
     return user;
@@ -87,7 +86,7 @@ export class UserResolver {
 
     const token = v4();
     await redis.set(
-      FORET_PASSWORD_PREFIX + token,
+      FORGET_PASSWORD_PREFIX + token,
       user.id,
       "ex",
       1000 * 60 * 60 * 24
