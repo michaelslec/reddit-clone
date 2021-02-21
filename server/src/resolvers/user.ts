@@ -51,7 +51,7 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { redis, em, req }: MyCtx
+    @Ctx() { redis, req }: MyCtx
   ): Promise<typeof UserResponse> {
     if (newPassword.length <= 2)
       return new FieldError("newPassword", "Length must be greater than 2");
@@ -59,11 +59,13 @@ export class UserResolver {
     const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
     if (userId === null) return new FieldError("token", "Token expired");
 
-    const user = await em.findOne(User, { id: parseInt(userId) });
+    const user = await User.findOne(parseInt(userId));
     if (!user) return new FieldError("token", "User no longer exists");
 
-    user.password = await argon2.hash(newPassword);
-    await em.persistAndFlush(user);
+    await User.update(
+      { id: parseInt(userId) },
+      { password: await argon2.hash(newPassword) }
+    );
 
     redis.del(FORGET_PASSWORD_PREFIX + token);
     req.session.userId = user.id;
@@ -74,15 +76,15 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("input") input: EmailUsernamePasswordInput,
-    @Ctx() { em, redis }: MyCtx
+    @Ctx() { redis }: MyCtx
   ): Promise<boolean> {
     let where;
     if (input.email !== "") where = { email: input.email };
     else if (input.username !== "") where = { username: input.username };
     else return false;
 
-    const user = await em.findOne(User, where);
-    if (user === null) return true;
+    const user = await User.findOne(where);
+    if (typeof user === "undefined") return true;
 
     const token = v4();
     await redis.set(
@@ -101,17 +103,16 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req, em }: MyCtx) {
+  me(@Ctx() { req }: MyCtx) {
     if (!req.session.userId) return null;
 
-    const user = await em.findOne(User, { id: req.session.userId });
-    return user;
+    return User.findOne(req.session.userId);
   }
 
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: EmailUsernamePasswordInput,
-    @Ctx() { em, req }: MyCtx
+    @Ctx() { req }: MyCtx
   ): Promise<typeof UserResponse> {
     if (!options.email?.includes("@"))
       return new FieldError("email", "Invalid email address");
@@ -127,14 +128,14 @@ export class UserResolver {
     }
 
     const hashedPassword = await argon2.hash(options.password);
-    const user = em.create(User, {
-      email: options.email,
-      username: options.username,
-      password: hashedPassword,
-    });
 
+    let user;
     try {
-      await em.persistAndFlush(user);
+      user = await User.create({
+        email: options.email,
+        username: options.username,
+        password: hashedPassword,
+      }).save();
     } catch (err) {
       // TODO: watch here for error code on username AND/OR email already existing
       if (err.code == "23505" && err.detail.includes("email"))
@@ -157,16 +158,15 @@ export class UserResolver {
   async login(
     @Arg("options")
     options: EmailUsernamePasswordInput,
-    @Ctx() { em, req }: MyCtx
+    @Ctx() { req }: MyCtx
   ): Promise<typeof UserResponse> {
-    const user = await em.findOne(
-      User,
+    const user = await User.findOne(
       options.email !== ""
         ? { email: options.email }
         : { username: options.username }
     );
 
-    if (user === null)
+    if (typeof user === "undefined")
       return new FieldError("username", "Username or email doesn't exist");
 
     const valid = await argon2.verify(user.password, options.password);
