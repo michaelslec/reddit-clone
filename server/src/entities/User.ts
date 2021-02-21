@@ -20,7 +20,7 @@ export class User {
 
   @Field(() => String)
   @UpdateDateColumn()
-  updatedAt = new Date();
+  updatedAt: Date;
 
   @Field()
   @Column({ unique: true })
