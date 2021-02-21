@@ -134,6 +134,16 @@ export type ChangePasswordMutation = (
   ) }
 );
 
+export type ForgotPasswordMutationVariables = Exact<{
+  input: EmailUsernamePasswordInput;
+}>;
+
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'forgotPassword'>
+);
+
 export type LoginMutationVariables = Exact<{
   options: EmailUsernamePasswordInput;
 }>;
@@ -225,6 +235,15 @@ ${CommonUserFragmentDoc}`;
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const ForgotPasswordDocument = gql`
+    mutation forgotPassword($input: EmailUsernamePasswordInput!) {
+  forgotPassword(input: $input)
+}
+    `;
+
+export function useForgotPasswordMutation() {
+  return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
 };
 export const LoginDocument = gql`
     mutation Login($options: EmailUsernamePasswordInput!) {
