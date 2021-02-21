@@ -1,7 +1,5 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import microConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -62,7 +60,7 @@ async function main() {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyCtx => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }): MyCtx => ({ req, res, redis }),
   });
 
   server.applyMiddleware({ app, cors: false });
