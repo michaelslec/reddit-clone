@@ -19,7 +19,12 @@ export default function CreatePost(): ReactElement | null {
           <Form>
             <InputField name="title" />
             <Box mt={4}>
-              <InputField name="text" label="Body" placeholder="text..." />
+              <InputField
+                textArea
+                name="text"
+                label="Body"
+                placeholder="text..."
+              />
             </Box>
             <Button
               mt={4}
