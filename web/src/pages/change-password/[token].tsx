@@ -1,8 +1,19 @@
-import { Button, useToast } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  Button,
+  useToast,
+  Link,
+  AlertDescription,
+  Box,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
 import InputField from "../../components/InputField";
 import { Wrapper } from "../../components/Wrapper";
 import { useChangePasswordMutation } from "../../generated/graphql";
@@ -27,11 +38,24 @@ const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
           if (data?.__typename === "FieldError") {
             if (data.field === "token")
               toast({
-                title: "An error occurred.",
-                description: data.message,
-                status: "error",
-                duration: 8000,
-                isClosable: true,
+                render: () => {
+                  return (
+                    <Alert status="error">
+                      <AlertIcon />
+                      <Box flex="1">
+                        <AlertTitle>An Error Occured</AlertTitle>
+                        <AlertDescription>
+                          {data.message + ". "}
+                          {data.message.includes("expired") ? (
+                            <NextLink href="/forgot-password">
+                              <Link color="grey">Click Here</Link>
+                            </NextLink>
+                          ) : null}
+                        </AlertDescription>
+                      </Box>
+                    </Alert>
+                  );
+                },
               });
 
             setErrors({
