@@ -143,7 +143,7 @@ export type LoginMutation = (
   { __typename?: 'Mutation' }
   & { login: (
     { __typename?: 'FieldError' }
-    & Pick<FieldError, 'field' | 'message'>
+    & ErrorFragment
   ) | (
     { __typename?: 'User' }
     & CommonUserFragment
@@ -167,7 +167,7 @@ export type RegisterMutation = (
   { __typename?: 'Mutation' }
   & { register: (
     { __typename?: 'FieldError' }
-    & Pick<FieldError, 'field' | 'message'>
+    & ErrorFragment
   ) | (
     { __typename?: 'User' }
     & CommonUserFragment
@@ -233,12 +233,12 @@ export const LoginDocument = gql`
       ...CommonUser
     }
     ... on FieldError {
-      field
-      message
+      ...Error
     }
   }
 }
-    ${CommonUserFragmentDoc}`;
+    ${CommonUserFragmentDoc}
+${ErrorFragmentDoc}`;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
@@ -259,12 +259,12 @@ export const RegisterDocument = gql`
       ...CommonUser
     }
     ... on FieldError {
-      field
-      message
+      ...Error
     }
   }
 }
-    ${CommonUserFragmentDoc}`;
+    ${CommonUserFragmentDoc}
+${ErrorFragmentDoc}`;
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);

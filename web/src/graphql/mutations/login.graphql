@@ -5,8 +5,7 @@ mutation Login($options: EmailUsernamePasswordInput!) {
     }
 
     ... on FieldError {
-      field
-      message
+      ...Error
     }
   }
 }
