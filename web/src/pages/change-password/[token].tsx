@@ -1,9 +1,8 @@
-import { Alert, AlertIcon, Button, useToast } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
 import InputField from "../../components/InputField";
 import { Wrapper } from "../../components/Wrapper";
 import { useChangePasswordMutation } from "../../generated/graphql";
