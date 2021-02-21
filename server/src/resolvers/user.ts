@@ -14,7 +14,6 @@ import {
 } from "type-graphql";
 import { COOKIE_NAME, FORET_PASSWORD_PREFIX } from "../constants";
 import sendEmail from "../utils/sendEmail";
-import { redis } from "ioredis";
 import { v4 } from "uuid";
 
 @InputType()
@@ -51,7 +50,7 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("input") input: EmailUsernamePasswordInput,
-    @Ctx() { em }: MyCtx
+    @Ctx() { em, redis }: MyCtx
   ) {
     const where =
       input.email === ""
@@ -62,7 +61,7 @@ export class UserResolver {
     if (user === null) return true;
 
     const token = v4();
-    redis.set(
+    await redis.set(
       FORET_PASSWORD_PREFIX + token,
       user.id,
       "ex",
@@ -71,7 +70,7 @@ export class UserResolver {
 
     await sendEmail(
       input.email,
-      `<a href="htp://localhost:3000/change-password/${token}">reset password</a>`
+      `<a href="http://localhost:3000/change-password/${token}">reset password</a>`
     );
 
     return true;
