@@ -2,6 +2,7 @@ query Posts($limit: Int!, $cursor: Float) {
   posts(limit: $limit, cursor: $cursor) {
     id
     title
+    text
     createdAt
     updatedAt
   }
