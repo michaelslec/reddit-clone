@@ -3,7 +3,7 @@ import { createUrqlClient } from "../utils/createUrqlClients";
 import { usePostsQuery } from "../generated/graphql";
 import Layout from "../components/Layout";
 import NextLink from "next/link";
-import { Box, Heading, Link, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 
 function Index() {
@@ -15,13 +15,19 @@ function Index() {
 
   return (
     <Layout>
-      <NextLink href="/create-post">
-        <Link>create post</Link>
-      </NextLink>
+      <Flex justify="space-between">
+        <Heading size="3xl">LiReddit</Heading>
+        <Flex direction="column-reverse">
+          <NextLink href="/create-post">
+            <Link>create post</Link>
+          </NextLink>
+        </Flex>
+      </Flex>
+      <hr />
       {!data ? (
         <div>Loading ...</div>
       ) : (
-        <Stack spacing={6}>
+        <Stack mt={6} spacing={6}>
           {data.posts.map((post) => (
             <Box
               key={post.id}
