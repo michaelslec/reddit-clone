@@ -58,8 +58,9 @@ const cursorPagination = (): Resolver => {
     fieldInfos.forEach((fi) => {
       const key = cache.resolve(entityKey, fi.fieldKey) as string;
       const data = cache.resolve(key, "posts") as string[];
+      const dataNoRepeats = results.length === 0 ? data : data.slice(1);
       if (!cache.resolve(key, "hasMore")) hasMore = false;
-      results.push(...data);
+      results.push(...dataNoRepeats);
     });
 
     return { __typename: "PaginatedPosts", posts: results, hasMore };
