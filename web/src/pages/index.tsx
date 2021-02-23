@@ -38,7 +38,7 @@ function Index() {
         <div>Loading ...</div>
       ) : (
         <Stack mt={6} spacing={6}>
-          {data!.posts.map((post) => (
+          {data!.posts.posts.map((post) => (
             <Box
               key={post.id}
               p={5}
@@ -56,13 +56,15 @@ function Index() {
           ))}
         </Stack>
       )}
-      {data ? (
+      {data && data.posts.hasMore ? (
         <Flex>
           <Button
             onClick={() => {
               setVariables({
                 ...variables,
-                cursor: parseInt(data.posts[data.posts.length - 1].createdAt),
+                cursor: parseInt(
+                  data.posts.posts[data.posts.posts.length - 1].createdAt
+                ),
               });
             }}
             isLoading={fetching}
