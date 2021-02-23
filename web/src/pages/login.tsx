@@ -5,7 +5,7 @@ import InputField from "../components/InputField";
 import { Box, Button, Flex, Link } from "@chakra-ui/react";
 import { useLoginMutation } from "../generated/graphql";
 import { useRouter } from "next/router";
-import { createUrqlClient } from "../utils/createUrqlClients";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
 import NextLink from "next/link";
 

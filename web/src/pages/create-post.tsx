@@ -6,7 +6,7 @@ import React, { ReactElement } from "react";
 import InputField from "../components/InputField";
 import Layout from "../components/Layout";
 import { useCreatePostMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClients";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import useIsAuth from "../utils/useIsAuth";
 
 export interface CreatePostProps {}

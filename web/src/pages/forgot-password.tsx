@@ -5,7 +5,7 @@ import React, { ReactElement } from "react";
 import InputField from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { useForgotPasswordMutation } from "../generated/graphql";
-import { createUrqlClient } from "../utils/createUrqlClients";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 function ForgotPassword(): ReactElement | null {
   const [, sendForgotPassword] = useForgotPasswordMutation();

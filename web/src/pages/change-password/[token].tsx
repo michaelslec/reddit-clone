@@ -7,7 +7,7 @@ import InputField from "../../components/InputField";
 import TokenAlert from "../../components/TokenAlert";
 import { Wrapper } from "../../components/Wrapper";
 import { useChangePasswordMutation } from "../../generated/graphql";
-import { createUrqlClient } from "../../utils/createUrqlClients";
+import { createUrqlClient } from "../../utils/createUrqlClient";
 
 function ChangePassword() {
   const [, changePassword] = useChangePasswordMutation();
