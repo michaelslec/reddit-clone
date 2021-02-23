@@ -35,23 +35,28 @@ class PaginatedPosts {
 
 @Resolver()
 export class PostResolver {
-  @Query(() => [Post])
-  posts(
+  @Query(() => PaginatedPosts)
+  async posts(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
-  ): Promise<Post[]> {
+  ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
+    const realLimitPlusOne = realLimit + 1;
 
     const qb = getConnection()
       .getRepository(Post)
       .createQueryBuilder("P")
       .orderBy('"createdAt"', "DESC")
-      .take(realLimit);
+      .take(realLimitPlusOne);
 
     if (cursor)
       qb.where('"createdAt" <= :cursor', { cursor: new Date(cursor) });
 
-    return qb.getMany();
+    const posts = await qb.getMany();
+    return {
+      posts: posts.slice(0, realLimit),
+      hasMore: posts.length === realLimitPlusOne,
+    };
   }
 
   @Query(() => Post, { nullable: true })
