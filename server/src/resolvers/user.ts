@@ -6,11 +6,13 @@ import {
   createUnionType,
   Ctx,
   Field,
+  FieldResolver,
   InputType,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
 } from "type-graphql";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import sendEmail from "../utils/sendEmail";
@@ -45,8 +47,16 @@ const UserResponse = createUnionType({
   types: () => [FieldError, User],
 });
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => String)
+  //rerun
+  email(@Root() user: User, @Ctx() { req }: MyCtx) {
+    if (req.session.userId === user.id) return user.email;
+
+    return "";
+  }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
