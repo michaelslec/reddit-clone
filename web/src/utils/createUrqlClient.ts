@@ -7,7 +7,12 @@ import {
   Cache,
 } from "@urql/exchange-graphcache";
 import Router from "next/router";
-import { Exchange, dedupExchange, fetchExchange } from "urql";
+import {
+  Exchange,
+  dedupExchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
 import { pipe, tap } from "wonka";
 import {
   LogoutMutation,
@@ -33,7 +38,7 @@ export const errorExchange: Exchange = ({ forward }) => (ops$) => {
 const cursorPagination = (): Resolver => {
   return (
     _parent: Data,
-    _fieldArgs: Variables,
+    fieldArgs: Variables,
     cache: Cache,
     info: ResolveInfo
   ) => {
@@ -42,6 +47,9 @@ const cursorPagination = (): Resolver => {
     const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
     console.log("fieldInfos:", fieldInfos);
     if (fieldInfos.length === 0) return undefined;
+
+    const key = `${fieldName}(${stringifyVariables(fieldArgs)})`;
+    info.partial = !cache.resolve(entityKey, key);
 
     let results: string[] = [];
     fieldInfos.forEach((fi) => {
