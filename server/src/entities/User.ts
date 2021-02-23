@@ -9,6 +9,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Post } from "./Post";
+import { Upper } from "./Upper";
 
 @ObjectType()
 @Entity()
@@ -19,6 +20,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, (post) => post.creator)
   posts: Post[];
+
+  @OneToMany(() => Upper, (upper) => upper.user)
+  uppers: Upper[];
 
   @Field()
   @Column({ unique: true })

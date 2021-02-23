@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Upper } from "./Upper";
 import { User } from "./User";
 
 @ObjectType()
@@ -32,6 +34,9 @@ export class Post extends BaseEntity {
   @Field()
   @ManyToOne(() => User, (user) => user.posts)
   creator: User;
+
+  @OneToMany(() => Upper, (upper) => upper.post)
+  uppers: Upper[];
 
   @Field()
   @Column()
