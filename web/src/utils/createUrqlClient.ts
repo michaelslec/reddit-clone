@@ -43,12 +43,13 @@ const cursorPagination = (): Resolver => {
     console.log("fieldInfos:", fieldInfos);
     if (fieldInfos.length === 0) return undefined;
 
-    let data;
+    let results: string[] = [];
     fieldInfos.forEach((fi) => {
-      data = cache.resolve(entityKey, fi.fieldKey) as string[];
+      const data = cache.resolve(entityKey, fi.fieldKey) as string[];
+      results.push(...data);
     });
 
-    return data;
+    return results;
   };
 };
 
