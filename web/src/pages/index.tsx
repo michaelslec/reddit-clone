@@ -12,10 +12,14 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 function Index() {
-  const [{ data, fetching }] = usePostsQuery({ variables: { limit: 10 } });
+  const [variables, setVariables] = useState({
+    limit: 10,
+    cursor: undefined as undefined | number,
+  });
+  const [{ data, fetching }] = usePostsQuery({ variables });
 
   if (!fetching && !data) return <div>Your query failed for some reason</div>;
 
@@ -54,7 +58,17 @@ function Index() {
       )}
       {data ? (
         <Flex>
-          <Button isLoading={fetching} m="auto" my={8}>
+          <Button
+            onClick={() => {
+              setVariables({
+                ...variables,
+                cursor: parseInt(data.posts[data.posts.length - 1].createdAt),
+              });
+            }}
+            isLoading={fetching}
+            m="auto"
+            my={8}
+          >
             load more
           </Button>
         </Flex>
