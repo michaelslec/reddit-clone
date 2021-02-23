@@ -15,6 +15,7 @@ import {
 import { MyCtx } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
+import { Upper } from "../entities/Upper";
 
 @InputType()
 class PostInput {
@@ -35,6 +36,40 @@ class PaginatedPosts {
 
 @Resolver()
 export class PostResolver {
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async vote(
+    @Arg("postId", () => Int) postId: number,
+    @Arg("value", () => Int) value: number,
+    @Ctx() { req }: MyCtx
+  ) {
+    const isUpper = value !== -1;
+    const realValue = isUpper ? 1 : -1;
+    const { userId } = req.session;
+    // await Upper.insert({
+    //   userId,
+    //   postId,
+    //   value: realValue,
+    // });
+
+    await getConnection().query(
+      `
+      start transaction;
+
+      insert into upper("userId", "postId", value)
+      values (${userId}, ${postId}, ${realValue});
+
+      update post
+      set points = points + ${realValue}
+      where id = ${postId};
+
+      commit;
+      `
+    );
+
+    return true;
+  }
+
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number,
@@ -64,7 +99,6 @@ export class PostResolver {
       `,
       replacements
     );
-    console.log(posts);
 
     return {
       posts: posts.slice(0, realLimit),

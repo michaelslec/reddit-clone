@@ -14,7 +14,7 @@ export class Upper extends BaseEntity {
   @PrimaryColumn()
   userId: number;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.uppers)
   user: User;
 
@@ -22,7 +22,7 @@ export class Upper extends BaseEntity {
   @PrimaryColumn()
   postId: number;
 
-  @Field()
+  @Field(() => Post)
   @ManyToOne(() => Post, (post) => post.uppers)
   post: Post;
 }

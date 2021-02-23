@@ -50,7 +50,6 @@ const UserResponse = createUnionType({
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => String)
-  //rerun
   email(@Root() user: User, @Ctx() { req }: MyCtx) {
     if (req.session.userId === user.id) return user.email;
 
