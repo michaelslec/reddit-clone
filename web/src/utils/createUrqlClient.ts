@@ -42,11 +42,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
             );
           },
           login: (_result, _args, cache) => {
-            betterUpdateQuery<LoginMutation, MeQuery>(
+            betterUpdateQuery(
               cache,
               { query: MeDocument },
               _result,
-              (result, query) => {
+              (result: LoginMutation, query) => {
                 if (result.login.__typename === "FieldError") {
                   return query;
                 } else {
@@ -58,11 +58,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
             );
           },
           register: (_result, _args, cache) => {
-            betterUpdateQuery<RegisterMutation, MeQuery>(
+            betterUpdateQuery(
               cache,
               { query: MeDocument },
               _result,
-              (result, query) => {
+              (result: RegisterMutation, query) => {
                 if (result.register.__typename === "FieldError") {
                   return query;
                 } else {
