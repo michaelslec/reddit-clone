@@ -1,6 +1,10 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { usePostsQuery, useDeletePostMutation } from "../generated/graphql";
+import {
+  usePostsQuery,
+  useDeletePostMutation,
+  useMeQuery,
+} from "../generated/graphql";
 import Layout from "../components/Layout";
 import NextLink from "next/link";
 import {
@@ -24,6 +28,7 @@ function Index() {
   });
   const [{ data, fetching }] = usePostsQuery({ variables });
   const [, deletePost] = useDeletePostMutation();
+  const [{ data: meData }] = useMeQuery();
 
   if (!fetching && !data) return <div>Your query failed for some reason</div>;
 
@@ -61,13 +66,15 @@ function Index() {
                     <Text mt={4} noOfLines={6}>
                       {post.text}
                     </Text>
-                    <IconButton
-                      onClick={() => deletePost({ id: post.id })}
-                      icon={<DeleteIcon />}
-                      aria-label="Delete post"
-                      colorScheme="red"
-                      variant="ghost"
-                    />
+                    {post.creator.id === meData?.me?.id ? (
+                      <IconButton
+                        onClick={() => deletePost({ id: post.id })}
+                        icon={<DeleteIcon />}
+                        aria-label="Delete post"
+                        colorScheme="red"
+                        variant="ghost"
+                      />
+                    ) : null}
                   </Flex>
                 </Box>
               </Flex>
