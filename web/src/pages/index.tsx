@@ -8,12 +8,14 @@ import {
   Button,
   Flex,
   Heading,
+  IconButton,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import VoteSection from "../components/VoteSection";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 function Index() {
   const [variables, setVariables] = useState({
@@ -49,9 +51,17 @@ function Index() {
                 </NextLink>
                 <Text> posted by {post.creator.username}</Text>
                 <hr />
-                <Text mt={6} noOfLines={6}>
-                  {post.text}
-                </Text>
+                <Flex direction="row" justify="space-between" align="flex-end">
+                  <Text mt={4} noOfLines={6}>
+                    {post.text}
+                  </Text>
+                  <IconButton
+                    icon={<DeleteIcon />}
+                    aria-label="Delete post"
+                    colorScheme="red"
+                    variant="ghost"
+                  />
+                </Flex>
               </Box>
             </Flex>
           ))}
