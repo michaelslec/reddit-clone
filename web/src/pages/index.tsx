@@ -51,7 +51,11 @@ function Index() {
             >
               <VoteSection post={post} />
               <Box flexGrow={1}>
-                <Heading fontSize="4xl">{post.title}</Heading>
+                <NextLink href="/post/[id]" as={`/post/${post.id}`}>
+                  <Link>
+                    <Heading fontSize="4xl">{post.title}</Heading>
+                  </Link>
+                </NextLink>
                 <Text> posted by {post.creator.username}</Text>
                 <hr />
                 <Text mt={6} noOfLines={6}>
