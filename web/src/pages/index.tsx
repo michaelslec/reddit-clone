@@ -51,7 +51,7 @@ function Index() {
             >
               <VoteSection post={post} />
               <Box flexGrow={1}>
-                <NextLink href="/post/[id]" as={`/post/${post.id}`}>
+                <NextLink href={`/post/${encodeURIComponent(post.id)}`}>
                   <Link>
                     <Heading fontSize="4xl">{post.title}</Heading>
                   </Link>
