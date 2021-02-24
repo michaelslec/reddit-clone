@@ -8,13 +8,11 @@ import {
   Button,
   Flex,
   Heading,
-  IconButton,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import VoteSection from "../components/VoteSection";
 
 function Index() {
