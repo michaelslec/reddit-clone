@@ -26,6 +26,11 @@ export default function NavBar(): ReactElement | null {
   else
     body = (
       <HStack>
+        <NextLink href="/create-post">
+          <Button mr={4} as={Link} variant="outline">
+            create post
+          </Button>
+        </NextLink>
         <Box>{data.me.username}</Box>
         <Button
           isLoading={logoutFetching}
@@ -38,13 +43,15 @@ export default function NavBar(): ReactElement | null {
     );
 
   return (
-    <Flex zIndex={1} align="flex-end" position="sticky" top={0} bg="tan" p={4}>
-      <NextLink href="/">
-        <Link>
-          <Heading>LiReddit</Heading>
-        </Link>
-      </NextLink>
-      <Box ml={"auto"}>{body}</Box>
-    </Flex>
+    <Box zIndex={1} top={0} position="sticky" bg="tan" p={4}>
+      <Flex align="flex-end" m="auto" maxW={800}>
+        <NextLink href="/">
+          <Link>
+            <Heading>LiReddit</Heading>
+          </Link>
+        </NextLink>
+        <Box ml={"auto"}>{body}</Box>
+      </Flex>
+    </Box>
   );
 }
