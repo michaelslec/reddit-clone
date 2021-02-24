@@ -76,6 +76,7 @@ function Index() {
                           />
                         </NextLink>
                         <IconButton
+                          as={Link}
                           onClick={() => deletePost({ id: post.id })}
                           icon={<DeleteIcon />}
                           aria-label="Delete post"
