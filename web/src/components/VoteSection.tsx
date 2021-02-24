@@ -1,16 +1,14 @@
 import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
 import { Box, Flex, IconButton } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
-import { useVoteMutation } from "../generated/graphql";
+import { PostSnippetFragment, useVoteMutation } from "../generated/graphql";
 
-export interface VoteSectionProps {
-  points: number;
-  id: number;
-}
+type VoteSectionProps = {
+  post: PostSnippetFragment;
+};
 
 export default function VoteSection({
-  points,
-  id,
+  post,
 }: VoteSectionProps): ReactElement | null {
   const [, voteFn] = useVoteMutation();
   return (
@@ -19,7 +17,7 @@ export default function VoteSection({
         <IconButton
           onClick={() =>
             voteFn({
-              postId: id,
+              postId: post.id,
               value: 1,
             })
           }
@@ -27,11 +25,11 @@ export default function VoteSection({
           icon={<ArrowUpIcon />}
           variant="ghost"
         />
-        {points}
+        {post.points}
         <IconButton
           onClick={() =>
             voteFn({
-              postId: id,
+              postId: post.id,
               value: -1,
             })
           }

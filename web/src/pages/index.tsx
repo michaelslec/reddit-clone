@@ -49,7 +49,7 @@ function Index() {
               flex="1"
               borderRadius="md"
             >
-              <VoteSection points={post.points} id={post.id} />
+              <VoteSection post={post} />
               <Box flexGrow={1}>
                 <Heading fontSize="4xl">{post.title}</Heading>
                 <Text> posted by {post.creator.username}</Text>
