@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import VoteSection from "../components/VoteSection";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 function Index() {
   const [variables, setVariables] = useState({
@@ -58,22 +58,31 @@ function Index() {
                   </NextLink>
                   <Text> posted by {post.creator.username}</Text>
                   <hr />
+                  <Text mt={4} noOfLines={6}>
+                    {post.text}
+                  </Text>
                   <Flex
-                    direction="row"
+                    direction="column"
                     justify="space-between"
                     align="flex-end"
                   >
-                    <Text mt={4} noOfLines={6}>
-                      {post.text}
-                    </Text>
                     {post.creator.id === meData?.me?.id ? (
-                      <IconButton
-                        onClick={() => deletePost({ id: post.id })}
-                        icon={<DeleteIcon />}
-                        aria-label="Delete post"
-                        colorScheme="red"
-                        variant="ghost"
-                      />
+                      <Box mt={2}>
+                        <NextLink href={`/post/edit/${post.id}`}>
+                          <IconButton
+                            icon={<EditIcon />}
+                            aria-label="Delete post"
+                            variant="ghost"
+                          />
+                        </NextLink>
+                        <IconButton
+                          onClick={() => deletePost({ id: post.id })}
+                          icon={<DeleteIcon />}
+                          aria-label="Delete post"
+                          colorScheme="red"
+                          variant="ghost"
+                        />
+                      </Box>
                     ) : null}
                   </Flex>
                 </Box>
