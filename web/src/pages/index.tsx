@@ -26,15 +26,6 @@ function Index() {
 
   return (
     <Layout>
-      <Flex justify="space-between">
-        <Heading size="3xl">LiReddit</Heading>
-        <Flex direction="column-reverse">
-          <NextLink href="/create-post">
-            <Link>create post</Link>
-          </NextLink>
-        </Flex>
-      </Flex>
-      <hr />
       {!data && fetching ? (
         <div>Loading ...</div>
       ) : (
