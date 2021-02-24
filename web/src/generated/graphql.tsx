@@ -43,6 +43,7 @@ export type Post = {
   __typename?: 'Post';
   id: Scalars['Int'];
   points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
   title: Scalars['String'];
   text: Scalars['String'];
   creator: User;
@@ -143,6 +144,15 @@ export type CommonUserFragment = (
 export type ErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
+);
+
+export type PostSnippetFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'creatorId' | 'title' | 'text' | 'points' | 'createdAt'>
+  & { creator: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -260,11 +270,7 @@ export type PostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'creatorId' | 'title' | 'text' | 'points' | 'createdAt'>
-      & { creator: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username'>
-      ) }
+      & PostSnippetFragment
     )> }
   ) }
 );
@@ -280,6 +286,20 @@ export const ErrorFragmentDoc = gql`
     fragment Error on FieldError {
   field
   message
+}
+    `;
+export const PostSnippetFragmentDoc = gql`
+    fragment PostSnippet on Post {
+  id
+  creatorId
+  title
+  text
+  points
+  createdAt
+  creator {
+    id
+    username
+  }
 }
     `;
 export const ChangePasswordDocument = gql`
@@ -392,21 +412,12 @@ export const PostsDocument = gql`
     query Posts($limit: Int!, $cursor: Float) {
   posts(limit: $limit, cursor: $cursor) {
     posts {
-      id
-      creatorId
-      title
-      text
-      points
-      createdAt
-      creator {
-        id
-        username
-      }
+      ...PostSnippet
     }
     hasMore
   }
 }
-    `;
+    ${PostSnippetFragmentDoc}`;
 
 export function usePostsQuery(options: Omit<Urql.UseQueryArgs<PostsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<PostsQuery>({ query: PostsDocument, ...options });
