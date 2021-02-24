@@ -1,4 +1,4 @@
-import { Box, Button, Flex, HStack, Link } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, HStack, Link } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
@@ -38,7 +38,12 @@ export default function NavBar(): ReactElement | null {
     );
 
   return (
-    <Flex zIndex={1} position="sticky" top={0} bg="tan" p={4}>
+    <Flex zIndex={1} align="flex-end" position="sticky" top={0} bg="tan" p={4}>
+      <NextLink href="/">
+        <Link>
+          <Heading>LiReddit</Heading>
+        </Link>
+      </NextLink>
       <Box ml={"auto"}>{body}</Box>
     </Flex>
   );
