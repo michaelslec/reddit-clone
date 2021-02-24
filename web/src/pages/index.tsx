@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import VoteSection from "../components/VoteSection";
 
 function Index() {
   const [variables, setVariables] = useState({
@@ -50,21 +51,7 @@ function Index() {
               flex="1"
               borderRadius="md"
             >
-              <Box pr={3}>
-                <Flex direction="column" align="center">
-                  <IconButton
-                    aria-label="Up vote"
-                    icon={<ArrowUpIcon />}
-                    variant="unstyled"
-                  />
-                  {post.points}
-                  <IconButton
-                    aria-label="Down vote"
-                    icon={<ArrowDownIcon />}
-                    variant="unstyled"
-                  />
-                </Flex>
-              </Box>
+              <VoteSection points={post.points} />
               <Box flexGrow={1}>
                 <Heading fontSize="4xl">{post.title}</Heading>
                 <Text> posted by {post.creator.username}</Text>
