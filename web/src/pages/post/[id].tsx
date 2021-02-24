@@ -1,6 +1,7 @@
+import { Box, Heading, Text } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
-import { ReactElement } from "react";
+import React, { ReactElement } from "react";
 import Layout from "../../components/Layout";
 import { usePostQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
@@ -17,7 +18,21 @@ function Post(): ReactElement | null {
   });
 
   if (fetching) return <Layout>Loading...</Layout>;
-  return <Layout>{data?.post?.text}</Layout>;
+
+  if (!data?.post)
+    return (
+      <Layout>
+        <Box>Could not find post with this ID</Box>
+      </Layout>
+    );
+
+  return (
+    <Layout>
+      <Heading>{data.post.title}</Heading>
+      <hr />
+      <Text mt={4}>{data.post.text}</Text>
+    </Layout>
+  );
 }
 
 export default withUrqlClient(createUrqlClient, { ssr: true })(Post);
