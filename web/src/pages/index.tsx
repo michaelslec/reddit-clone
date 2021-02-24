@@ -8,11 +8,13 @@ import {
   Button,
   Flex,
   Heading,
+  IconButton,
   Link,
   Stack,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 
 function Index() {
   const [variables, setVariables] = useState({
@@ -39,21 +41,39 @@ function Index() {
       ) : (
         <Stack mt={6} spacing={6}>
           {data!.posts.posts.map((post) => (
-            <Box
+            <Flex
               key={post.id}
               p={5}
+              pl={1}
               shadow="md"
               borderWidth="1px"
               flex="1"
               borderRadius="md"
             >
-              <Heading fontSize="4xl">{post.title}</Heading>
-              <Text> posted by {post.creator.username}</Text>
-              <hr />
-              <Text mt={6} noOfLines={6}>
-                {post.text}
-              </Text>
-            </Box>
+              <Box pr={3}>
+                <Flex direction="column" align="center">
+                  <IconButton
+                    aria-label="Up vote"
+                    icon={<ArrowUpIcon />}
+                    variant="unstyled"
+                  />
+                  {post.points}
+                  <IconButton
+                    aria-label="Down vote"
+                    icon={<ArrowDownIcon />}
+                    variant="unstyled"
+                  />
+                </Flex>
+              </Box>
+              <Box flexGrow={1}>
+                <Heading fontSize="4xl">{post.title}</Heading>
+                <Text> posted by {post.creator.username}</Text>
+                <hr />
+                <Text mt={6} noOfLines={6}>
+                  {post.text}
+                </Text>
+              </Box>
+            </Flex>
           ))}
         </Stack>
       )}
