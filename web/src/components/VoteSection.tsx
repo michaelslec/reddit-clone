@@ -25,7 +25,7 @@ export default function VoteSection({
           }
           aria-label="Up vote"
           icon={<ArrowUpIcon />}
-          variant="unstyled"
+          variant="ghost"
         />
         {points}
         <IconButton
@@ -37,7 +37,7 @@ export default function VoteSection({
           }
           aria-label="Down vote"
           icon={<ArrowDownIcon />}
-          variant="unstyled"
+          variant="ghost"
         />
       </Flex>
     </Box>
