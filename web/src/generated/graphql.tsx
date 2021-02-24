@@ -148,7 +148,7 @@ export type ErrorFragment = (
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'creatorId' | 'title' | 'text' | 'points' | 'createdAt'>
+  & Pick<Post, 'id' | 'creatorId' | 'title' | 'text' | 'points' | 'createdAt' | 'voteStatus'>
   & { creator: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -296,6 +296,7 @@ export const PostSnippetFragmentDoc = gql`
   text
   points
   createdAt
+  voteStatus
   creator {
     id
     username
