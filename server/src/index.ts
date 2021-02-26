@@ -16,6 +16,7 @@ import { User } from "./entities/User";
 import { Post } from "./entities/Post";
 import path from "path";
 import { Upper } from "./entities/Upper";
+import createUserLoader from "./utils/createUserLoader";
 
 async function main() {
   const conn = await createConnection({
@@ -64,7 +65,12 @@ async function main() {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyCtx => ({ req, res, redis }),
+    context: ({ req, res }): MyCtx => ({
+      req,
+      res,
+      redis,
+      userLoader: createUserLoader(),
+    }),
   });
 
   server.applyMiddleware({ app, cors: false });
