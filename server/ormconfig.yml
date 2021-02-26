@@ -1,0 +1,9 @@
+default: # default connection
+  type: "postgres"
+  host: "localhost"
+  port: 5432
+  username: "postgres"
+  password: "postgres"
+  database: "reddit-clone-prod"
+  entities: ["dist/entities/*.js"]
+  migrations: ["src/migrations/*.js"]
