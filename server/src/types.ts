@@ -1,7 +1,7 @@
-import DataLoader from "dataloader";
 import { Request, Response } from "express";
 import { Redis } from "ioredis";
-import { User } from "./entities/User";
+import createUpperLoader from "./utils/createUpperLoader";
+import createUserLoader from "./utils/createUserLoader";
 
 declare module "express-session" {
   interface Session {
@@ -13,5 +13,6 @@ export type MyCtx = {
   req: Request;
   res: Response;
   redis: Redis;
-  userLoader: DataLoader<number, User, number>;
+  userLoader: ReturnType<typeof createUserLoader>;
+  upperLoader: ReturnType<typeof createUpperLoader>;
 };

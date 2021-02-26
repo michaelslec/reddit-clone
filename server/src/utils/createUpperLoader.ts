@@ -1,7 +1,7 @@
 import DataLoader from "dataloader";
 import { Upper } from "../entities/Upper";
 
-export default function createVoteStatusLoader() {
+export default function createUpperLoader() {
   return new DataLoader<{ postId: number; userId: number }, Upper | null>(
     async (keys) => {
       const uppers = await Upper.findByIds(keys as any);

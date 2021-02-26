@@ -17,6 +17,7 @@ import { Post } from "./entities/Post";
 import path from "path";
 import { Upper } from "./entities/Upper";
 import createUserLoader from "./utils/createUserLoader";
+import createUpperLoader from "./utils/createUpperLoader";
 
 async function main() {
   const conn = await createConnection({
@@ -70,6 +71,7 @@ async function main() {
       res,
       redis,
       userLoader: createUserLoader(),
+      upperLoader: createUpperLoader(),
     }),
   });
 
