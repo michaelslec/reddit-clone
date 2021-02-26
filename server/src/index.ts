@@ -1,3 +1,4 @@
+import "dotenv-safe/config";
 import "reflect-metadata";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import express from "express";

@@ -7,7 +7,7 @@
     "gen-env": "gen-env-types .env.local -o src/types/env.d.ts -e .",
     "build": "tsc",
     "watch": "tsc -w",
-    "start": "nodemon -r dotenv-safe/config --inspect dist/index.js dotenv_config_path=.env.local",
+    "start": "nodemon --inspect dist/index.js dotenv_config_path=.env.local",
     "dev": "concurrently \"yarn watch\" \"yarn start\""
   },
   "repository": {
