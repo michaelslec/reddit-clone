@@ -40,8 +40,8 @@ class PaginatedPosts {
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => User)
-  creator(@Root() post: Post) {
-    return User.findOne(post.creatorId);
+  creator(@Root() post: Post, @Ctx() { userLoader }: MyCtx) {
+    return userLoader.load(post.creatorId);
   }
 
   @Mutation(() => Boolean)
