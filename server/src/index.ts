@@ -22,7 +22,7 @@ import createUpperLoader from "./utils/createUpperLoader";
 async function main() {
   const conn = await createConnection({
     type: "postgres",
-    database: "reddit-clone",
+    url: process.env.DATABASE_URL,
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
@@ -34,7 +34,7 @@ async function main() {
 
   const RedisStore = connectRedis(session);
 
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -56,7 +56,7 @@ async function main() {
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
-      secret: process.env.SESH_SECRET as string,
+      secret: process.env.SESH_SECRET,
       resave: false,
     })
   );
@@ -77,8 +77,8 @@ async function main() {
 
   server.applyMiddleware({ app, cors: false });
 
-  app.listen(3001, () => {
-    console.log("server started on http://localhost:3001");
+  app.listen(parseInt(process.env.PORT), () => {
+    console.log(`server started on http://localhost:${process.env.PORT}`);
   });
 }
 
