@@ -2,12 +2,10 @@ import { Box, Button, Flex, Heading, HStack, Link } from "@chakra-ui/react";
 import React, { ReactElement } from "react";
 import NextLink from "next/link";
 import { useMeQuery, useLogoutMutation } from "../generated/graphql";
-import { useRouter } from "next/router";
 
 export interface NavBarProps {}
 
 export default function NavBar(): ReactElement | null {
-  const router = useRouter();
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery();
 
