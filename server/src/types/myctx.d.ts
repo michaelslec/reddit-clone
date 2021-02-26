@@ -1,13 +1,7 @@
 import { Request, Response } from "express";
 import { Redis } from "ioredis";
-import createUpperLoader from "./utils/createUpperLoader";
-import createUserLoader from "./utils/createUserLoader";
-
-declare module "express-session" {
-  interface Session {
-    userId: number;
-  }
-}
+import createUpperLoader from "../utils/createUpperLoader";
+import createUserLoader from "../utils/createUserLoader";
 
 export type MyCtx = {
   req: Request;

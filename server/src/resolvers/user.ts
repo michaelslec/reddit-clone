@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
 import { User } from "../entities/User";
-import { MyCtx } from "src/types";
+import { MyCtx } from "../types/myctx";
 import {
   Arg,
   createUnionType,

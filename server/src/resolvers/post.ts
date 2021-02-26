@@ -14,7 +14,7 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { MyCtx } from "../types";
+import { MyCtx } from "../types/myctx";
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { Upper } from "../entities/Upper";

@@ -1,4 +1,4 @@
-import { MyCtx } from "src/types";
+import { MyCtx } from "../types/myctx";
 import { MiddlewareFn } from "type-graphql";
 
 export const isAuth: MiddlewareFn<MyCtx> = ({ context }, next) => {
