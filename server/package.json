@@ -4,6 +4,7 @@
   "description": "A simple clone of reddit using GraphQL, Typescript, react",
   "main": "src/index.ts",
   "scripts": {
+    "build": "tsc",
     "watch": "tsc -w",
     "start": "nodemon -r dotenv/config --inspect dist/index.js dotenv_config_path=.env.local",
     "dev": "concurrently \"yarn watch\" \"yarn start\""
