@@ -56,6 +56,7 @@ async function main() {
         httpOnly: true,
         sameSite: "lax",
         secure: __prod__, // cookie only works in https
+        domain: __prod__ ? ".mlecompte.com" : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESH_SECRET,
