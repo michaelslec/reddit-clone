@@ -3,6 +3,7 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
   Float,
   InputType,
   Int,
@@ -10,12 +11,14 @@ import {
   ObjectType,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
 } from "type-graphql";
 import { MyCtx } from "../types";
 import { isAuth } from "../middleware/isAuth";
 import { getConnection } from "typeorm";
 import { Upper } from "../entities/Upper";
+import { User } from "../entities/User";
 
 @InputType()
 class PostInput {
@@ -34,8 +37,13 @@ class PaginatedPosts {
   hasMore: boolean;
 }
 
-@Resolver()
+@Resolver(Post)
 export class PostResolver {
+  @FieldResolver(() => User)
+  creator(@Root() post: Post) {
+    return User.findOne(post.creatorId);
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async vote(
@@ -112,20 +120,12 @@ export class PostResolver {
     const posts = await getConnection().query(
       `
       select p.*, 
-      json_build_object(
-        'id', u.id,
-        'username', u.username,
-        'email', u.email,
-        'createdAt', u."createdAt",
-        'updatedAt', u."updatedAt"
-      ) creator,
       ${
         req.session.userId
           ? '(select value from upper where "userId" = $2 and "postId" = p.id) "voteStatus"'
           : 'null as "voteStatus"'
       }
       from post p 
-      inner join public.user u on u.id = p."creatorId"
       ${cursor ? 'where p."createdAt" <= $' + cursorIdx : ""}
       order by p."createdAt" DESC
       limit $1
@@ -141,7 +141,7 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    return Post.findOne(id, { relations: ["creator"] });
+    return Post.findOne(id);
   }
 
   @Mutation(() => Post)
