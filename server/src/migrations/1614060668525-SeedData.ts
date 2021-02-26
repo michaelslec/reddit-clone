@@ -21924,5 +21924,5 @@ Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, t
                                 `);
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(_: QueryRunner): Promise<void> {}
 }
