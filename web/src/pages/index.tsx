@@ -26,11 +26,17 @@ function Index() {
     limit: 15,
     cursor: undefined as undefined | number,
   });
-  const [{ data, fetching }] = usePostsQuery({ variables });
+  const [{ data, error, fetching }] = usePostsQuery({ variables });
   const [, deletePost] = useDeletePostMutation();
   const [{ data: meData }] = useMeQuery();
 
-  if (!fetching && !data) return <div>Your query failed for some reason</div>;
+  if (!fetching && !data)
+    return (
+      <div>
+        <div>Your query failed for some reason</div>
+        <div>{error?.message}</div>
+      </div>
+    );
 
   return (
     <Layout>
