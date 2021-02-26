@@ -36,10 +36,7 @@ export default function NavBar(): ReactElement | null {
         <Box>{data.me.username}</Box>
         <Button
           isLoading={logoutFetching}
-          onClick={async () => {
-            await logout();
-            router.reload();
-          }}
+          onClick={async () => await logout()}
           variant="link"
         >
           logout
