@@ -7,13 +7,17 @@ export interface LayoutProps extends WrapperProps {
 }
 
 export default function Layout({
+  title,
+  content,
   children,
   variant,
 }: LayoutProps): ReactElement | null {
   return (
     <>
       <NavBar />
-      <Wrapper variant={variant}>{children}</Wrapper>
+      <Wrapper variant={variant} title={title} content={content}>
+        {children}
+      </Wrapper>
     </>
   );
 }

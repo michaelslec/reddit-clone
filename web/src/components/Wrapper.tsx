@@ -1,21 +1,34 @@
 import { Box } from "@chakra-ui/react";
+import Head from "next/head";
+import React, { ReactElement, ReactNode } from "react";
 
 export interface WrapperProps {
   variant?: "small" | "regular";
+  title: string;
+  content: string;
+  children: ReactNode;
 }
 
-export const Wrapper: React.FC<WrapperProps> = ({
+export function Wrapper({
+  title,
+  content,
   children,
   variant = "regular",
-}) => {
+}: WrapperProps): ReactElement | null {
   return (
-    <Box
-      mt={8}
-      mx="auto"
-      maxW={variant == "regular" ? "800px" : "400px"}
-      w="100%"
-    >
-      {children}
-    </Box>
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={content} />
+      </Head>
+      <Box
+        mt={8}
+        mx="auto"
+        maxW={variant == "regular" ? "800px" : "400px"}
+        w="100%"
+      >
+        {children}
+      </Box>
+    </>
   );
-};
+}
