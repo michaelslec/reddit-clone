@@ -64,7 +64,7 @@ function Index() {
                   </NextLink>
                   <Text> posted by {post.creator.username}</Text>
                   <hr />
-                  <Text mt={4} noOfLines={6}>
+                  <Text mt={4} noOfLines={6} style={{ whiteSpace: "pre-wrap" }}>
                     {post.text}
                   </Text>
                   <Flex

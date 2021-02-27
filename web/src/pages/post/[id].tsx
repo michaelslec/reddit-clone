@@ -20,7 +20,9 @@ function Post(): ReactElement | null {
     <Layout>
       <Heading>{data.post.title}</Heading>
       <hr />
-      <Text mt={4}>{data.post.text}</Text>
+      <Text mt={4} style={{ whiteSpace: "pre-wrap" }}>
+        {data.post.text}
+      </Text>
     </Layout>
   );
 }
