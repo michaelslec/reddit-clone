@@ -29,7 +29,7 @@ async function main() {
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [Post, User, Upper],
   });
-  await conn.runMigrations();
+  if (__prod__) await conn.runMigrations();
 
   const app = express();
 
