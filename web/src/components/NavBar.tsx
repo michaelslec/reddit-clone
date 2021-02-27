@@ -47,7 +47,7 @@ export default function NavBar(): ReactElement | null {
       <Flex align="flex-end" m="auto" maxW={800}>
         <NextLink href="/">
           <Link>
-            <Heading>LiReddit</Heading>
+            <Heading>Messages</Heading>
           </Link>
         </NextLink>
         <Box ml={"auto"}>{body}</Box>
