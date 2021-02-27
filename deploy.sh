@@ -1,7 +1,11 @@
 #!/bin/bash
 
-echo -n "What version? "
-read VER
+if [ $# -eq 0 ]; then
+  echo -n "What version? "
+  read VER
+else
+  VER=$1
+fi
 
 NEW_BUILD="michaelslec/reddit-clone:${VER}"
 
