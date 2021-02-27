@@ -17,7 +17,7 @@ function CreatePost(): ReactElement | null {
   useIsAuth();
 
   return (
-    <Layout variant="small">
+    <Layout variant="small" title="Create Post" content="Create a new post">
       <Formik
         initialValues={{ title: "", text: "" }}
         onSubmit={async (values) => {

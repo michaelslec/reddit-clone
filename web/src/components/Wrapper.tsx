@@ -5,7 +5,7 @@ import React, { ReactElement, ReactNode } from "react";
 export interface WrapperProps {
   variant?: "small" | "regular";
   title: string;
-  content: string;
+  content?: string;
   children: ReactNode;
 }
 
@@ -19,7 +19,7 @@ export function Wrapper({
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content={content} />
+        {content ? <meta name="description" content={content} /> : null}
       </Head>
       <Box
         mt={8}

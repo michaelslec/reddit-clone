@@ -7,17 +7,18 @@ import useGetPostFromUrl from "../../utils/useGetPostFromUrl";
 
 function Post(): ReactElement | null {
   const [{ data, fetching }] = useGetPostFromUrl();
-  if (fetching) return <Layout>Loading...</Layout>;
+
+  if (fetching) return <Layout title="Loading...">Loading...</Layout>;
 
   if (!data?.post)
     return (
-      <Layout>
+      <Layout title="Could not find post">
         <Box>Could not find post with this ID</Box>
       </Layout>
     );
 
   return (
-    <Layout>
+    <Layout title={data.post.title}>
       <Heading>{data.post.title}</Heading>
       <hr />
       <Text mt={4} style={{ whiteSpace: "pre-wrap" }}>

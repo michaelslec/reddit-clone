@@ -24,23 +24,23 @@ function EditPost(): ReactElement | null {
 
   if (fetching)
     return (
-      <Layout>
+      <Layout title="Loading...">
         <div>Loading...</div>
       </Layout>
     );
 
   if (!data?.post) {
     return (
-      <Layout>
+      <Layout title="Could not find post">
         <Box>Could not find post</Box>
       </Layout>
     );
   }
 
   return (
-    <Layout variant="small">
+    <Layout variant="small" title={`Edit: ${data.post.title}`}>
       <Formik
-        initialValues={{ title: data?.post?.title, text: data?.post?.text }}
+        initialValues={{ title: data.post.title, text: data.post.text }}
         onSubmit={async (values) => {
           await updatePost({ id: intId, ...values });
           router.push("/");

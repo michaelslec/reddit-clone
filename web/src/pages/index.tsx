@@ -39,7 +39,10 @@ function Index() {
     );
 
   return (
-    <Layout>
+    <Layout
+      title="Messages"
+      content="A simple content board app to post your thoughts."
+    >
       {!data && fetching ? (
         <div>Loading ...</div>
       ) : (

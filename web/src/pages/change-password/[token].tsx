@@ -1,6 +1,7 @@
 import { Button, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React from "react";
 import InputField from "../../components/InputField";
@@ -15,7 +16,10 @@ function ChangePassword() {
   const toast = useToast();
 
   return (
-    <Wrapper variant="small">
+    <Wrapper title="Change Password" content="Change password" variant="small">
+      <Head>
+        <title>Change Password</title>
+      </Head>
       <Formik
         initialValues={{ newPassword: "" }}
         onSubmit={async (values, { setErrors }) => {
